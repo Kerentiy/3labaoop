@@ -2,6 +2,7 @@ package ru.citytour.app.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.citytour.app.dto.CityTourDto;
 import ru.citytour.app.dto.MuseumTourDto;
 import ru.citytour.app.mapper.TourMapper;
@@ -11,7 +12,6 @@ import ru.citytour.app.model.MuseumTour;
 import ru.citytour.app.repository.ExcursionRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,16 +24,18 @@ public class TourService {
         return repository.findAll();
     }
 
+    @Transactional
     public Excursion saveCityTour(CityTourDto dto) {
-
-        
         CityTour tour = mapper.toEntity(dto);
+        // ПРИНУДИТЕЛЬНО ОБНОВЛЯЕМ РАСЧЁТЫ (необязательно, но для уверенности)
+        tour.updatePriceAndDuration();
         return repository.save(tour);
     }
 
+    @Transactional
     public Excursion saveMuseumTour(MuseumTourDto dto) {
-        
         MuseumTour tour = mapper.toEntity(dto);
+        tour.updatePriceAndDuration();
         return repository.save(tour);
     }
 

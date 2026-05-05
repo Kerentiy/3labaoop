@@ -25,7 +25,12 @@ public class Booking {
     @Column(name = "total_price", nullable = false)
     private int totalPrice;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "excursion_id", nullable = false)
     private Excursion excursion;
+    
+    // СВЯЗЬ С ПОКУПАТЕЛЕМ (через эту связь будет JOIN)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "customer_id", nullable = false)
+    private Customer customer;
 }

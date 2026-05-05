@@ -1,8 +1,8 @@
 package ru.citytour.app.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ru.citytour.app.model.Booking;
+import ru.citytour.app.model.Customer;
 
-public interface BookingRepository extends JpaRepository<Booking, Long> {
+public interface CustomerRepository extends JpaRepository<Customer, Long> {
     // ПУСТОЙ
 }

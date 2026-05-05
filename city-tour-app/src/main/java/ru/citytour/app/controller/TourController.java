@@ -27,7 +27,7 @@ public class TourController {
     @GetMapping("/add-city")
     public String addCityForm(Model model) {
         model.addAttribute("cityTour", new CityTourDto());
-        return "tours/add-city";  // Ищем в папке tours
+        return "tours/add-city";  // путь к файлу в папке tours
     }
 
     @PostMapping("/add-city")
@@ -40,7 +40,7 @@ public class TourController {
     @GetMapping("/add-museum")
     public String addMuseumForm(Model model) {
         model.addAttribute("museumTour", new MuseumTourDto());
-        return "tours/add-museum";  // Ищем в папке tours
+        return "tours/add-museum";  // путь к файлу в папке tours
     }
 
     @PostMapping("/add-museum")
@@ -56,10 +56,10 @@ public class TourController {
 
         if (tour instanceof CityTour) {
             model.addAttribute("cityTour", tourService.getCityTourDto(id));
-            return "tours/edit-city";  // Ищем в папке tours
+            return "tours/edit-city";  // путь к файлу в папке tours
         } else if (tour instanceof MuseumTour) {
             model.addAttribute("museumTour", tourService.getMuseumTourDto(id));
-            return "tours/edit-museum";  // Ищем в папке tours
+            return "tours/edit-museum";  // путь к файлу в папке tours
         }
         return "redirect:/";
     }
