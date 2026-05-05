@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Добавление MuseumTour</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            border-radius: 15px;
+        }
+
+        .form-card {
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 40px;
+            max-width: 700px;
+            margin: 0 auto;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h2 {
+            color: #667eea;
+            font-weight: bold;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 8px;
+        }
+
+        .form-control, .form-select {
+            border-radius: 10px;
+            border: 2px solid #e2e8f0;
+            padding: 10px 15px;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #84fab0;
+            box-shadow: 0 0 0 0.2rem rgba(132, 250, 176, 0.25);
+        }
+
+        .form-check {
+            margin-bottom: 12px;
+        }
+
+        .form-check-input {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .form-check-input:checked {
+            background-color: #84fab0;
+            border-color: #84fab0;
+        }
+
+        .form-check-label {
+            cursor: pointer;
+            color: #4a5568;
+        }
+
+        .price-hint {
+            font-size: 0.85rem;
+            color: #718096;
+            margin-top: 5px;
+        }
+
+        .btn-save {
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            color: #2d3748;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-save:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(132, 250, 176, 0.4);
+        }
+
+        .btn-secondary {
+            padding: 12px 30px;
+            border-radius: 25px;
+        }
+
+        .required:after {
+            content: " *";
+            color: red;
+        }
+        
+        .bg-success-gradient {
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+        }
+    </style>
+</head>
+<body>
+    <!-- Навигация -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="/" style="font-size: 1.5rem; font-weight: bold;">
+                <i class="fas fa-city"></i> City Tour Manager
+            </a>
+            <div class="ms-auto">
+                <a href="/" class="btn btn-outline-secondary">
+                    <i class="fas fa-home"></i> На главную
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="form-card">
+            <h2>
+                <i class="fas fa-museum"></i> Добавление музейной экскурсии
+            </h2>
+            
+            <form th:action="@{/add-museum}" th:object="${museumTour}" method="post">
+                <!-- Название -->
+                <div class="mb-3">
+                    <label class="form-label required">
+                        <i class="fas fa-tag"></i> Название экскурсии
+                    </label>
+                    <input type="text" class="form-control" th:field="*{name}" required 
+                           placeholder="Например: Экскурсия в Эрмитаж">
+                </div>
+                
+                <!-- Цена и длительность -->
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label required">
+                            <i class="fas fa-ruble-sign"></i> Базовая цена (руб)
+                        </label>
+                        <input type="number" class="form-control" th:field="*{basePrice}" required min="100" max="100000">
+                        <div class="price-hint">от 100 до 100 000 руб.</div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label required">
+                            <i class="fas fa-clock"></i> Базовая длительность (часов)
+                        </label>
+                        <input type="number" class="form-control" th:field="*{baseDuration}" required min="1" max="24">
+                        <div class="price-hint">от 1 до 24 часов</div>
+                    </div>
+                </div>
+
+                <!-- Музей -->
+                <div class="mb-3">
+                    <label class="form-label required">
+                        <i class="fas fa-landmark"></i> Музей
+                    </label>
+                    <input type="text" class="form-control" th:field="*{museum}" required 
+                           placeholder="Например: Эрмитаж, Третьяковская галерея">
+                </div>
+
+                <!-- Язык гида -->
+                <div class="mb-3">
+                    <label class="form-label">
+                        <i class="fas fa-language"></i> Язык гида
+                    </label>
+                    <select class="form-select" th:field="*{guide}">
+                        <option value="русский">🇷🇺 Русский (без доплаты)</option>
+                        <option value="английский">🇬🇧 Английский (+80 руб)</option>
+                        <option value="немецкий">🇩🇪 Немецкий (+80 руб)</option>
+                        <option value="французский">🇫🇷 Французский (+80 руб)</option>
+                    </select>
+                </div>
+
+                <!-- Опции -->
+                <div class="mb-3">
+                    <label class="form-label">
+                        <i class="fas fa-cogs"></i> Дополнительные опции
+                    </label>
+                    
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" th:field="*{audio}">
+                        <label class="form-check-label">
+                            🎧 <strong>Аудиогид</strong> (+60 руб)
+                        </label>
+                    </div>
+                    
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" th:field="*{expertGuide}">
+                        <label class="form-check-label">
+                            👨‍🎓 <strong>Эксперт-гид</strong> (+200 руб, +2 часа)
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Предварительный расчет -->
+                <div class="alert alert-info mt-3" id="preview" style="display: none;">
+                    <small>
+                        <i class="fas fa-calculator"></i> 
+                        <strong>Предварительный расчет:</strong><br>
+                        Итоговая цена: <span id="previewPrice">0</span> руб<br>
+                        Итоговая длительность: <span id="previewDuration">0</span> ч
+                    </small>
+                </div>
+
+                <!-- Кнопки -->
+                <div class="d-flex justify-content-end gap-2 mt-4">
+                    <a href="/" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Отмена
+                    </a>
+                    <button type="submit" class="btn btn-save">
+                        <i class="fas fa-save"></i> Сохранить MuseumTour
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>City Tour Manager</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+
+        /* Навигация */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95) !important;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-link {
+            color: #4a5568 !important;
+            font-weight: 500;
+            margin: 0 10px;
+            transition: all 0.3s;
+        }
+
+        .nav-link:hover {
+            color: #667eea !important;
+            transform: translateY(-2px);
+        }
+
+        /* Главная карточка */
+        .hero-card {
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 50px;
+            margin: 40px auto;
+            max-width: 1400px;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .lead {
+            color: #718096;
+            font-size: 1.2rem;
+        }
+
+        /* Кнопки */
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 40px 0;
+        }
+
+        .btn-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+        }
+
+        .btn-gradient:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+            color: white;
+        }
+
+        .btn-success-gradient {
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            border: none;
+            color: #2d3748;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+        }
+
+        .btn-success-gradient:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(132, 250, 176, 0.4);
+            color: #2d3748;
+        }
+
+        /* Таблица */
+        .table-custom {
+            border-radius: 15px;
+            overflow: hidden;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .table-custom thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .table-custom thead th {
+            padding: 12px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .table-custom tbody tr:hover {
+            background-color: #f7fafc;
+            cursor: pointer;
+        }
+
+        .table-custom tbody td {
+            padding: 12px;
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        .badge-city {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 5px 12px;
+            border-radius: 20px;
+            color: white;
+            font-size: 12px;
+            display: inline-block;
+        }
+
+        .badge-museum {
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            padding: 5px 12px;
+            border-radius: 20px;
+            color: #2d3748;
+            font-size: 12px;
+            display: inline-block;
+        }
+
+        .btn-warning {
+            border-radius: 20px;
+            padding: 5px 15px;
+            background-color: #f59e0b;
+            border: none;
+        }
+
+        .btn-warning:hover {
+            background-color: #d97706;
+            transform: translateY(-2px);
+        }
+
+        .alert-info {
+            background: linear-gradient(135deg, #e0e7ff 0%, #e9d5ff 100%);
+            border: none;
+            color: #4a5568;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .text-start {
+            text-align: left !important;
+        }
+        
+        .mb-4 {
+            margin-bottom: 1.5rem !important;
+        }
+        
+        .mt-4 {
+            margin-top: 1.5rem !important;
+        }
+        
+        .fw-bold {
+            font-weight: 600 !important;
+        }
+        
+        .text-center {
+            text-align: center !important;
+        }
+        
+        .text-muted {
+            color: #718096 !important;
+            font-size: 0.8rem;
+        }
+        
+        .fa-city, .fa-museum {
+            margin-right: 5px;
+        }
+        
+        .price-old {
+            text-decoration: line-through;
+            color: #999;
+            font-size: 0.85rem;
+            margin-right: 5px;
+        }
+        
+        .price-new {
+            color: #667eea;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <!-- Навигация -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-city"></i> City Tour Manager
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">
+                            <i class="fas fa-home"></i> Главная
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/add-city">
+                            <i class="fas fa-plus-circle"></i> CityTour
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/add-museum">
+                            <i class="fas fa-museum"></i> MuseumTour
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Основной контент -->
+    <div class="container">
+        <div class="hero-card">
+            <div class="text-center">
+                <i class="fas fa-city" style="font-size: 4rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i>
+                <h1>City Tour Manager</h1>
+                <p class="lead">Система управления экскурсиями</p>
+                
+                <div class="button-group">
+                    <a href="/add-city" class="btn-gradient">
+                        <i class="fas fa-plus"></i> Добавить CityTour
+                    </a>
+                    <a href="/add-museum" class="btn-success-gradient">
+                        <i class="fas fa-plus"></i> Добавить MuseumTour
+                    </a>
+                </div>
+
+                <h3 class="text-start mb-4">
+                    <i class="fas fa-list"></i> Список экскурсий
+                </h3>
+                
+                <!-- Отображение ошибок -->
+                <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+                
+                <!-- Таблица с экскурсиями -->
+                <div th:if="${tours != null and !tours.isEmpty()}">
+                    <div class="table-responsive">
+                        <table class="table table-custom">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Название</th>
+                                    <th>Тип</th>
+                                    <th>Базовая цена</th>
+                                    <th>Итоговая цена</th>
+                                    <th>Базовая длительность</th>
+                                    <th>Итоговая длительность</th>
+                                    <th>Действия</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="tour : ${tours}">
+                                    <td th:text="${tour.id}"></td>
+                                    <td th:text="${tour.name}" class="fw-bold"></td>
+                                    <td>
+                                        <span th:if="${tour.type == 'CityTour'}" class="badge-city">
+                                            <i class="fas fa-city"></i> City Tour
+                                        </span>
+                                        <span th:if="${tour.type == 'MuseumTour'}" class="badge-museum">
+                                            <i class="fas fa-museum"></i> Museum Tour
+                                        </span>
+                                    </td>
+                                    <!-- Базовая цена -->
+                                    <td th:text="${tour.basePrice} + ' ₽'"></td>
+                                    
+                                    <!-- Итоговая цена с учетом опций -->
+                                    <td>
+                                        <span th:if="${tour.type == 'CityTour'}">
+                                            <span th:if="${tour.finalPrice != tour.basePrice}" class="price-old" th:text="${tour.basePrice} + ' ₽'"></span>
+                                            <span class="price-new" th:text="${tour.finalPrice} + ' ₽'"></span>
+                                            <small class="text-muted" th:if="${tour.finalPrice != tour.basePrice}">
+                                                <i class="fas fa-info-circle"></i> с опциями
+                                            </small>
+                                        </span>
+                                        <span th:if="${tour.type == 'MuseumTour'}">
+                                            <span th:if="${tour.finalPrice != tour.basePrice}" class="price-old" th:text="${tour.basePrice} + ' ₽'"></span>
+                                            <span class="price-new" th:text="${tour.finalPrice} + ' ₽'"></span>
+                                            <small class="text-muted" th:if="${tour.finalPrice != tour.basePrice}">
+                                                <i class="fas fa-info-circle"></i> с опциями
+                                            </small>
+                                        </span>
+                                    </td>
+                                    
+                                    <!-- Базовая длительность -->
+                                    <td th:text="${tour.baseDuration} + ' ч'"></td>
+                                    
+                                    <!-- Итоговая длительность с учетом опций -->
+                                    <td>
+                                        <span th:if="${tour.type == 'CityTour'}">
+                                            <span th:if="${tour.finalDuration != tour.baseDuration}" class="price-old" th:text="${tour.baseDuration} + ' ч'"></span>
+                                            <span class="price-new" th:text="${tour.finalDuration} + ' ч'"></span>
+                                        </span>
+                                        <span th:if="${tour.type == 'MuseumTour'}">
+                                            <span th:if="${tour.finalDuration != tour.baseDuration}" class="price-old" th:text="${tour.baseDuration} + ' ч'"></span>
+                                            <span class="price-new" th:text="${tour.finalDuration} + ' ч'"></span>
+                                        </span>
+                                    </td>
+                                    
+                                    <!-- Действия -->
+                                    <td>
+                                        <a th:href="@{/edit/{id}(id=${tour.id})}" class="btn btn-warning btn-sm">
+                                            <i class="fas fa-edit"></i> Изменить
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                         </table>
+                    </div>
+                </div>
+                
+                <!-- Сообщение, если нет экскурсий -->
+                <div th:if="${tours == null or tours.isEmpty()}" class="alert alert-info">
+                    <i class="fas fa-info-circle"></i> Пока нет экскурсий. Добавьте первую!
+                </div>
+                
+                <!-- Дополнительная информация -->
+                <div class="mt-4 text-muted small">
+                    <hr>
+                    <p><i class="fas fa-info-circle"></i> <strong>Примечание:</strong> Итоговая цена и длительность рассчитываются с учетом выбранных опций:</p>
+                    <ul class="text-start">
+                        <li><strong>CityTour:</strong> транспорт (автобус +100₽, +1ч), обед (+150₽, +1ч), гид (+20%, +2ч)</li>
+                        <li><strong>MuseumTour:</strong> гид на иностранном языке (+80₽), аудиогид (+60₽), эксперт-гид (+200₽, +2ч)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
