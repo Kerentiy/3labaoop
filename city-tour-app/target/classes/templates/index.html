@@ -2,7 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>City Tour Manager</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -19,7 +18,6 @@
             min-height: 100vh;
         }
 
-        /* Навигация */
         .navbar {
             background: rgba(255, 255, 255, 0.95) !important;
             box-shadow: 0 2px 20px rgba(0,0,0,0.1);
@@ -47,7 +45,6 @@
             transform: translateY(-2px);
         }
 
-        /* Главная карточка */
         .hero-card {
             background: white;
             border-radius: 30px;
@@ -84,7 +81,37 @@
             font-size: 1.2rem;
         }
 
-        /* Кнопки */
+        .filter-group {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 20px;
+            margin: 30px 0;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+        .filter-group .form-group {
+            flex: 1;
+            min-width: 150px;
+        }
+        .filter-group label {
+            font-weight: 600;
+            margin-bottom: 5px;
+            display: block;
+            font-size: 14px;
+        }
+        .filter-group select, .filter-group input {
+            width: 100%;
+            padding: 8px 12px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+        }
+        .filter-group button {
+            padding: 8px 20px;
+            border-radius: 10px;
+        }
+
         .button-group {
             display: flex;
             justify-content: center;
@@ -129,7 +156,30 @@
             color: #2d3748;
         }
 
-        /* Таблица */
+        .stats-group {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #e0e7ff 0%, #e9d5ff 100%);
+            padding: 15px 25px;
+            border-radius: 15px;
+            text-align: center;
+            flex: 1;
+            min-width: 120px;
+        }
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        .stat-label {
+            font-size: 14px;
+            color: #4a5568;
+        }
+
         .table-custom {
             border-radius: 15px;
             overflow: hidden;
@@ -189,6 +239,24 @@
             transform: translateY(-2px);
         }
 
+        .btn-info {
+            border-radius: 20px;
+            padding: 5px 15px;
+            background-color: #0ea5e9;
+            border: none;
+            color: white;
+        }
+
+        .btn-info:hover {
+            background-color: #0284c7;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            border-radius: 20px;
+            padding: 5px 15px;
+        }
+
         .alert-info {
             background: linear-gradient(135deg, #e0e7ff 0%, #e9d5ff 100%);
             border: none;
@@ -217,26 +285,80 @@
         .text-center {
             text-align: center !important;
         }
-        
-        .text-muted {
-            color: #718096 !important;
-            font-size: 0.8rem;
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
         }
         
-        .fa-city, .fa-museum {
-            margin-right: 5px;
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            width: 450px;
+            max-width: 90%;
+        }
+        
+        .close {
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #aaa;
+        }
+        
+        .close:hover {
+            color: #000;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+        }
+        
+        .form-label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+        }
+        
+        .w-100 {
+            width: 100%;
+        }
+        
+        .text-muted {
+            color: #718096;
+            font-size: 12px;
         }
         
         .price-old {
             text-decoration: line-through;
-            color: #999;
-            font-size: 0.85rem;
-            margin-right: 5px;
+            color: #a0aec0;
+            font-size: 12px;
         }
-        
         .price-new {
             color: #667eea;
             font-weight: bold;
+            font-size: 16px;
+        }
+        .badge-info {
+            background-color: #ecc94b;
+            color: #744210;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-left: 5px;
         }
     </style>
 </head>
@@ -267,7 +389,11 @@
                             <i class="fas fa-museum"></i> MuseumTour
                         </a>
                     </li>
-
+                    <li class="nav-item">
+                        <a class="nav-link" href="/bookings">
+                            <i class="fas fa-calendar-check"></i> Бронирования
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -277,7 +403,7 @@
     <div class="container">
         <div class="hero-card">
             <div class="text-center">
-                <i class="fas fa-city" style="font-size: 4rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i>
+                <i class="fas fa-city" style="font-size: 4rem;"></i>
                 <h1>City Tour Manager</h1>
                 <p class="lead">Система управления экскурсиями</p>
                 
@@ -290,107 +416,262 @@
                     </a>
                 </div>
 
+                <!-- Фильтры -->
+                <div class="filter-group">
+                    <div class="form-group">
+                        <label><i class="fas fa-filter"></i> Тип экскурсии</label>
+                        <select id="filterType" onchange="filterTable()">
+                            <option value="all">Все типы</option>
+                            <option value="CityTour">🏙️ CityTour</option>
+                            <option value="MuseumTour">🖼️ MuseumTour</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-dollar-sign"></i> Мин. цена</label>
+                        <input type="number" id="minPrice" oninput="filterTable()" placeholder="От 0">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-search"></i> Поиск по названию</label>
+                        <input type="text" id="searchName" oninput="filterTable()" placeholder="Введите название...">
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-secondary" onclick="resetFilters()">
+                            <i class="fas fa-undo"></i> Сбросить
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Статистика -->
+                <div class="stats-group">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalCount">0</div>
+                        <div class="stat-label">Всего экскурсий</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="avgPrice">0</div>
+                        <div class="stat-label">Средняя цена</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="maxPrice">0</div>
+                        <div class="stat-label">Макс. цена</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="minPriceStat">0</div>
+                        <div class="stat-label">Мин. цена</div>
+                    </div>
+                </div>
+
                 <h3 class="text-start mb-4">
                     <i class="fas fa-list"></i> Список экскурсий
                 </h3>
                 
-                <!-- Отображение ошибок -->
-                <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+                <div th:if="${param.error}" class="alert alert-danger" th:text="${param.error}"></div>
                 
                 <!-- Таблица с экскурсиями -->
-                <div th:if="${tours != null and !tours.isEmpty()}">
-                    <div class="table-responsive">
-                        <table class="table table-custom">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Название</th>
-                                    <th>Тип</th>
-                                    <th>Базовая цена</th>
-                                    <th>Итоговая цена</th>
-                                    <th>Базовая длительность</th>
-                                    <th>Итоговая длительность</th>
-                                    <th>Действия</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr th:each="tour : ${tours}">
-                                    <td th:text="${tour.id}"></td>
-                                    <td th:text="${tour.name}" class="fw-bold"></td>
-                                    <td>
-                                        <span th:if="${tour.type == 'CityTour'}" class="badge-city">
-                                            <i class="fas fa-city"></i> City Tour
-                                        </span>
-                                        <span th:if="${tour.type == 'MuseumTour'}" class="badge-museum">
-                                            <i class="fas fa-museum"></i> Museum Tour
-                                        </span>
-                                    </td>
-                                    <!-- Базовая цена -->
-                                    <td th:text="${tour.basePrice} + ' ₽'"></td>
-                                    
-                                    <!-- Итоговая цена с учетом опций -->
-                                    <td>
-                                        <span th:if="${tour.type == 'CityTour'}">
-                                            <span th:if="${tour.finalPrice != tour.basePrice}" class="price-old" th:text="${tour.basePrice} + ' ₽'"></span>
-                                            <span class="price-new" th:text="${tour.finalPrice} + ' ₽'"></span>
-                                            <small class="text-muted" th:if="${tour.finalPrice != tour.basePrice}">
-                                                <i class="fas fa-info-circle"></i> с опциями
-                                            </small>
-                                        </span>
-                                        <span th:if="${tour.type == 'MuseumTour'}">
-                                            <span th:if="${tour.finalPrice != tour.basePrice}" class="price-old" th:text="${tour.basePrice} + ' ₽'"></span>
-                                            <span class="price-new" th:text="${tour.finalPrice} + ' ₽'"></span>
-                                            <small class="text-muted" th:if="${tour.finalPrice != tour.basePrice}">
-                                                <i class="fas fa-info-circle"></i> с опциями
-                                            </small>
-                                        </span>
-                                    </td>
-                                    
-                                    <!-- Базовая длительность -->
-                                    <td th:text="${tour.baseDuration} + ' ч'"></td>
-                                    
-                                    <!-- Итоговая длительность с учетом опций -->
-                                    <td>
-                                        <span th:if="${tour.type == 'CityTour'}">
-                                            <span th:if="${tour.finalDuration != tour.baseDuration}" class="price-old" th:text="${tour.baseDuration} + ' ч'"></span>
-                                            <span class="price-new" th:text="${tour.finalDuration} + ' ч'"></span>
-                                        </span>
-                                        <span th:if="${tour.type == 'MuseumTour'}">
-                                            <span th:if="${tour.finalDuration != tour.baseDuration}" class="price-old" th:text="${tour.baseDuration} + ' ч'"></span>
-                                            <span class="price-new" th:text="${tour.finalDuration} + ' ч'"></span>
-                                        </span>
-                                    </td>
-                                    
-                                    <!-- Действия -->
-                                    <td>
-                                        <a th:href="@{/edit/{id}(id=${tour.id})}" class="btn btn-warning btn-sm">
-                                            <i class="fas fa-edit"></i> Изменить
-                                        </a>
-                                    </td>
-                                </tr>
-                            </tbody>
-                         </table>
-                    </div>
-                </div>
-                
-                <!-- Сообщение, если нет экскурсий -->
-                <div th:if="${tours == null or tours.isEmpty()}" class="alert alert-info">
-                    <i class="fas fa-info-circle"></i> Пока нет экскурсий. Добавьте первую!
-                </div>
-                
-                <!-- Дополнительная информация -->
-                <div class="mt-4 text-muted small">
-                    <hr>
-                    <p><i class="fas fa-info-circle"></i> <strong>Примечание:</strong> Итоговая цена и длительность рассчитываются с учетом выбранных опций:</p>
-                    <ul class="text-start">
-                        <li><strong>CityTour:</strong> транспорт (автобус +100₽, +1ч), обед (+150₽, +1ч), гид (+20%, +2ч)</li>
-                        <li><strong>MuseumTour:</strong> гид на иностранном языке (+80₽), аудиогид (+60₽), эксперт-гид (+200₽, +2ч)</li>
-                    </ul>
+                <div class="table-responsive">
+                    <table class="table table-custom">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Название</th>
+                                <th>Тип</th>
+                                <th>Базовая цена</th>
+                                <th>Итоговая цена</th>
+                                <th>Длительность</th>
+                                <th>Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody id="excursionsTable">
+                            <tr th:each="tour : ${tours}">
+                                <td th:text="${tour.id}"></td>
+                                <td class="fw-bold" th:text="${tour.name}"></td>
+                                <td>
+                                    <span th:if="${tour.type == 'CityTour'}" class="badge-city">
+                                        <i class="fas fa-city"></i> City Tour
+                                    </span>
+                                    <span th:if="${tour.type == 'MuseumTour'}" class="badge-museum">
+                                        <i class="fas fa-museum"></i> Museum Tour
+                                    </span>
+                                </td>
+                                <td th:text="${tour.basePrice} + ' ₽'"></td>
+                                <td>
+                                    <span th:if="${tour.type == 'CityTour'}">
+                                        <span th:if="${tour.finalPrice != tour.basePrice}" class="price-old" th:text="${tour.basePrice} + ' ₽'"></span>
+                                        <span class="price-new" th:text="${tour.finalPrice} + ' ₽'"></span>
+                                        <span th:if="${tour.finalPrice != tour.basePrice}" class="badge-info">с опциями</span>
+                                    </span>
+                                    <span th:if="${tour.type == 'MuseumTour'}">
+                                        <span th:if="${tour.finalPrice != tour.basePrice}" class="price-old" th:text="${tour.basePrice} + ' ₽'"></span>
+                                        <span class="price-new" th:text="${tour.finalPrice} + ' ₽'"></span>
+                                        <span th:if="${tour.finalPrice != tour.basePrice}" class="badge-info">с опциями</span>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span th:if="${tour.type == 'CityTour'}">
+                                        <span th:text="${tour.finalDuration} + ' ч'"></span>
+                                    </span>
+                                    <span th:if="${tour.type == 'MuseumTour'}">
+                                        <span th:text="${tour.finalDuration} + ' ч'"></span>
+                                    </span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-info btn-sm" th:data-id="${tour.id}" th:data-name="${tour.name}" onclick="openBookingModal(this)">
+                                        <i class="fas fa-ticket-alt"></i> Купить
+                                    </button>
+                                    <a th:href="@{/edit/{id}(id=${tour.id})}" class="btn btn-warning btn-sm">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <form method="post" th:action="@{/delete/{id}(id=${tour.id})}" style="display:inline" onsubmit="return confirm('Удалить экскурсию?')">
+                                        <button class="btn btn-danger btn-sm">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            <tr th:if="${tours == null or tours.isEmpty()}">
+                                <td colspan="7" class="text-center">📭 Пока нет экскурсий. Добавьте первую!</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Модальное окно бронирования -->
+    <div id="bookingModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeBookingModal()">&times;</span>
+            <h3 class="text-center mb-3">
+                <i class="fas fa-ticket-alt"></i> Купить билет
+            </h3>
+            <form method="post" action="/bookings/create">
+                <input type="hidden" name="excursionId" id="excursionId">
+                <div class="mb-3">
+                    <label class="form-label">Экскурсия:</label>
+                    <input type="text" id="excursionName" class="form-control" readonly style="background-color: #f0f0f0;">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">ID покупателя:</label>
+                    <input type="number" name="customerId" class="form-control" min="1" required placeholder="Введите ваш ID">
+                    <small class="text-muted">Ваш уникальный идентификатор покупателя</small>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Количество человек:</label>
+                    <input type="number" name="peopleCount" class="form-control" min="1" max="50" required>
+                    <small class="text-muted">Максимум 50 человек</small>
+                </div>
+                <button type="submit" class="btn btn-success w-100">
+                    <i class="fas fa-check"></i> Оформить бронь
+                </button>
+            </form>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Функции фильтрации
+        function filterTable() {
+            const filterType = document.getElementById('filterType').value;
+            const minPrice = parseInt(document.getElementById('minPrice').value) || 0;
+            const searchName = document.getElementById('searchName').value.toLowerCase();
+            
+            const table = document.getElementById('excursionsTable');
+            const rows = table.getElementsByTagName('tr');
+            
+            let visibleCount = 0;
+            let prices = [];
+            
+            for (let i = 0; i < rows.length; i++) {
+                const row = rows[i];
+                // Пропускаем строку-заглушку "Нет экскурсий"
+                if (row.cells.length === 1 && row.cells[0].colSpan === 7) {
+                    continue;
+                }
+                
+                const typeCell = row.cells[2];
+                const nameCell = row.cells[1];
+                const priceCell = row.cells[4];
+                
+                if (!typeCell || !nameCell || !priceCell) continue;
+                
+                let type = '';
+                if (typeCell.innerText.includes('City Tour')) type = 'CityTour';
+                if (typeCell.innerText.includes('Museum Tour')) type = 'MuseumTour';
+                
+                const name = nameCell.innerText.toLowerCase();
+                const priceText = priceCell.innerText;
+                const price = parseInt(priceText) || 0;
+                
+                let show = true;
+                
+                if (filterType !== 'all' && type !== filterType) show = false;
+                if (minPrice > 0 && price < minPrice) show = false;
+                if (searchName && !name.includes(searchName)) show = false;
+                
+                if (show) {
+                    row.style.display = '';
+                    visibleCount++;
+                    prices.push(price);
+                } else {
+                    row.style.display = 'none';
+                }
+            }
+            
+            // Обновляем статистику
+            updateStats(visibleCount, prices);
+        }
+        
+        function updateStats(count, prices) {
+            document.getElementById('totalCount').innerText = count;
+            
+            if (count === 0 || prices.length === 0) {
+                document.getElementById('avgPrice').innerText = '0';
+                document.getElementById('maxPrice').innerText = '0';
+                document.getElementById('minPriceStat').innerText = '0';
+                return;
+            }
+            
+            const sum = prices.reduce((a, b) => a + b, 0);
+            const avg = sum / count;
+            const max = Math.max(...prices);
+            const min = Math.min(...prices);
+            
+            document.getElementById('avgPrice').innerText = Math.round(avg);
+            document.getElementById('maxPrice').innerText = max;
+            document.getElementById('minPriceStat').innerText = min;
+        }
+        
+        function resetFilters() {
+            document.getElementById('filterType').value = 'all';
+            document.getElementById('minPrice').value = '';
+            document.getElementById('searchName').value = '';
+            filterTable();
+        }
+        
+        function openBookingModal(button) {
+            var excursionId = button.getAttribute('data-id');
+            var excursionName = button.getAttribute('data-name');
+            document.getElementById('excursionId').value = excursionId;
+            document.getElementById('excursionName').value = excursionName;
+            document.getElementById('bookingModal').style.display = 'flex';
+        }
+        
+        function closeBookingModal() {
+            document.getElementById('bookingModal').style.display = 'none';
+        }
+        
+        window.onclick = function(event) {
+            var modal = document.getElementById('bookingModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+        
+        // Инициализация при загрузке
+        document.addEventListener('DOMContentLoaded', function() {
+            filterTable();
+        });
+    </script>
 </body>
 </html>

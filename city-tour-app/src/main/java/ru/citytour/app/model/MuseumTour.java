@@ -5,6 +5,7 @@ import lombok.*;
 
 @Entity
 @Table(name = "museum_tours")
+@PrimaryKeyJoinColumn(name = "id")
 @Data
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
@@ -14,12 +15,6 @@ public class MuseumTour extends Excursion {
     private String guide = "русский";
     private boolean audio = false;
     private boolean expertGuide = false;
-    
-    // Временные поля для хранения рассчитанных значений
-    @Transient
-    private int calculatedPrice;
-    @Transient
-    private int calculatedDuration;
 
     public MuseumTour(String name, int basePrice, int baseDuration, String museum,
                       String guide, boolean audio, boolean expertGuide) {
@@ -30,58 +25,59 @@ public class MuseumTour extends Excursion {
         this.guide = guide != null ? guide : "русский";
         this.audio = audio;
         this.expertGuide = expertGuide;
-        updatePriceAndDuration();
     }
 
     @Override
     public void updatePriceAndDuration() {
-        int price = getBasePrice();
-        int duration = getBaseDuration();
-        
-        // Логика как в C++
-        if (!"русский".equals(guide)) {
-            price += 80;
-        }
-        if (audio) {
-            price += 60;
-        }
-        if (expertGuide) {
-            price += 200;
-            duration += 2;
-        }
-        
-        this.calculatedPrice = price;
-        this.calculatedDuration = duration;
+        // Метод не используется
     }
 
     @Override
     public int calculateFinalPrice(int people) {
-        if (!canBook(people)) {
-            return 0;
+        int price = this.getBasePrice();
+        
+        // ЯЗЫК ГИДА: не русский +80 руб
+        if (!"русский".equals(this.guide)) {
+            price += 80;
         }
-        updatePriceAndDuration();
-        return calculatedPrice * people;
+        
+        // АУДИОГИД: +60 руб
+        if (this.audio) {
+            price += 60;
+        }
+        
+        // ЭКСПЕРТ-ГИД: +200 руб
+        if (this.expertGuide) {
+            price += 200;
+        }
+        
+        return price * people;
     }
     
-    // Методы для отображения в таблице
+    // МЕТОД ДЛЯ ПОЛУЧЕНИЯ ИТОГОВОЙ ЦЕНЫ (БЕЗ УМНОЖЕНИЯ НА КОЛИЧЕСТВО)
     public int getFinalPrice() {
-        updatePriceAndDuration();
-        return calculatedPrice;
+        int price = this.getBasePrice();
+        
+        if (!"русский".equals(this.guide)) {
+            price += 80;
+        }
+        if (this.audio) {
+            price += 60;
+        }
+        if (this.expertGuide) {
+            price += 200;
+        }
+        return price;
     }
     
+    // МЕТОД ДЛЯ ПОЛУЧЕНИЯ ИТОГОВОЙ ДЛИТЕЛЬНОСТИ
     public int getFinalDuration() {
-        updatePriceAndDuration();
-        return calculatedDuration;
-    }
-    
-    public String getMuseumName() { return museum; }
-    public String getGuideLanguage() { return guide; }
-    public boolean hasAudio() { return audio; }
-    public boolean hasExpertGuide() { 
-        return museum != null && museum.contains("Эрмитаж") && !"русский".equals(guide);
-    }
-    public boolean recommendAudio() {
-        return audio || !"русский".equals(guide);
+        int duration = this.getBaseDuration();
+        
+        if (this.expertGuide) {
+            duration += 2;
+        }
+        return duration;
     }
 
     @Override

@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class BookingDto {
     private Long id;
+    private Long customerId;        // НОВОЕ ПОЛЕ
     private Long excursionId;
     private String excursionName;
     private int peopleCount;
